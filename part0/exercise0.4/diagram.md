@@ -3,6 +3,7 @@
     Browser->>Server: POST /new_note
     activate Server
     Server-->>Browser: HTTP status code 302
+    Note right of Browser: URL redirect to create a new GET request
     deactivate Server
 
     Browser->>Server: GET /notes
