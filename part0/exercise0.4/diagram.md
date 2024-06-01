@@ -25,5 +25,6 @@
     Browser->>Server: GET /data.json
     activate Server
     Server-->>Browser: JSON file
+    Note right of Browser: Browser renders notes
     deactivate Server
 ```
