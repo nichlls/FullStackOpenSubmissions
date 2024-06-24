@@ -11,6 +11,16 @@ const Header = () => {
 };
 
 const Statistics = ({ good, neutral, bad }) => {
+  let total = good + neutral + bad;
+
+  const calculateAverage = () => {
+    let goodScore = good;
+    let neutralScore = 0;
+    let badScore = bad * -1;
+
+    return (goodScore + neutralScore + badScore) / total;
+  };
+
   return (
     <div>
       <p>
@@ -19,6 +29,9 @@ const Statistics = ({ good, neutral, bad }) => {
       <p>Good: {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad: {bad}</p>
+      <p>All: {total}</p>
+      <p>Average: {calculateAverage()}</p>
+      <p>Positive: {(good / total) * 100}</p>
     </div>
   );
 };
