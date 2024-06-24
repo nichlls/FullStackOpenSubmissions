@@ -13,6 +13,17 @@ const Header = () => {
 const Statistics = ({ good, neutral, bad }) => {
   let total = good + neutral + bad;
 
+  if (total < 1) {
+    return (
+      <div>
+        <p>
+          <strong>Statistics</strong>
+        </p>
+        <p>No feedback given</p>
+      </div>
+    );
+  }
+
   const calculateAverage = () => {
     let goodScore = good;
     let neutralScore = 0;
