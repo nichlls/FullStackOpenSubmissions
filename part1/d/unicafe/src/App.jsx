@@ -10,6 +10,14 @@ const Header = () => {
   );
 };
 
+const StatisticLine = ({ text, value }) => {
+  return (
+    <p>
+      {text}: {value}
+    </p>
+  );
+};
+
 const Statistics = ({ good, neutral, bad }) => {
   let total = good + neutral + bad;
 
@@ -37,12 +45,13 @@ const Statistics = ({ good, neutral, bad }) => {
       <p>
         <strong>Statistics</strong>
       </p>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
-      <p>All: {total}</p>
-      <p>Average: {calculateAverage()}</p>
-      <p>Positive: {(good / total) * 100}</p>
+      {/* TODO: Change to table */}
+      <StatisticLine text={"Good"} value={good} />
+      <StatisticLine text={"Neutral"} value={neutral} />
+      <StatisticLine text={"Bad"} value={bad} />
+      <StatisticLine text={"All"} value={total} />
+      <StatisticLine text={"Average"} value={calculateAverage()} />
+      <StatisticLine text={"Positive"} value={(good / total) * 100} />
     </div>
   );
 };
