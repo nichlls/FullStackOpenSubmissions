@@ -13,7 +13,7 @@ const Header = () => {
 const StatisticLine = ({ text, value }) => {
   return (
     <p>
-      {text}: {value}
+      {text} {value}
     </p>
   );
 };
@@ -45,13 +45,58 @@ const Statistics = ({ good, neutral, bad }) => {
       <p>
         <strong>Statistics</strong>
       </p>
-      {/* TODO: Change to table */}
-      <StatisticLine text={"Good"} value={good} />
-      <StatisticLine text={"Neutral"} value={neutral} />
-      <StatisticLine text={"Bad"} value={bad} />
-      <StatisticLine text={"All"} value={total} />
-      <StatisticLine text={"Average"} value={calculateAverage()} />
-      <StatisticLine text={"Positive"} value={(good / total) * 100} />
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <StatisticLine text={"Good:"} />
+            </td>
+            <td>
+              <StatisticLine value={good} />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <StatisticLine text={"Neutral:"} />
+            </td>
+            <td>
+              <StatisticLine value={neutral} />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <StatisticLine text={"Bad:"} />
+            </td>
+            <td>
+              <StatisticLine value={bad} />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <StatisticLine text={"All:"} />
+            </td>
+            <td>
+              <StatisticLine value={total} />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <StatisticLine text={"Average:"} />
+            </td>
+            <td>
+              <StatisticLine value={calculateAverage()} />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <StatisticLine text={"Positive:"} />
+            </td>
+            <td>
+              <StatisticLine value={(good / total) * 100} />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
