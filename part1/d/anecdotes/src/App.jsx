@@ -8,6 +8,15 @@ const ChangeAnecdote = ({ nextAnecdote }) => {
   );
 };
 
+const VoteButton = ({ increaseVoteCount, voteCount }) => {
+  return (
+    <div>
+      <p>{voteCount}</p>
+      <button onClick={increaseVoteCount}>Vote</button>
+    </div>
+  );
+};
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -21,19 +30,33 @@ const App = () => {
   ];
 
   const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
 
   const nextAnecdote = () => {
-    let random = Math.round(Math.random() * 7);
+    let random = Math.floor(Math.random() * anecdotes.length);
     // Prevent same number
-    while (random == selected) {
-      random = Math.round(Math.random() * 7);
+    while (random === selected) {
+      random = Math.floor(Math.random() * anecdotes.length);
     }
-    setSelected((selected) => random);
+    setSelected(random);
+  };
+
+  const increaseVoteCount = () => {
+    // copy of votes array
+    const tempVotes = [...votes];
+    // console.log("temp votes: ", tempVotes);
+    tempVotes[selected] += 1;
+    // console.log("Temp votes [selected]", tempVotes[selected]);
+    setVotes(tempVotes);
   };
 
   return (
     <div>
       {anecdotes[selected]}
+      <VoteButton
+        increaseVoteCount={increaseVoteCount}
+        voteCount={votes[selected]}
+      />
       <ChangeAnecdote nextAnecdote={nextAnecdote} />
     </div>
   );
