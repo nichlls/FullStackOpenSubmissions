@@ -17,6 +17,18 @@ const VoteButton = ({ increaseVoteCount, voteCount }) => {
   );
 };
 
+const HighestVoteAnecdote = ({ highestAnecdote }) => {
+  // console.log("highest: ", highestAnecdote);
+  return (
+    <div>
+      <p>
+        <strong>Anecdote with most votes</strong>
+      </p>
+      <p>{highestAnecdote}</p>
+    </div>
+  );
+};
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -50,6 +62,13 @@ const App = () => {
     setVotes(tempVotes);
   };
 
+  const highestAnecdote = () => {
+    let highestAnecdote = Math.max(...votes);
+    let index = votes.indexOf(highestAnecdote);
+    highestAnecdote = anecdotes[index];
+    return highestAnecdote;
+  };
+
   return (
     <div>
       {anecdotes[selected]}
@@ -58,6 +77,7 @@ const App = () => {
         voteCount={votes[selected]}
       />
       <ChangeAnecdote nextAnecdote={nextAnecdote} />
+      <HighestVoteAnecdote highestAnecdote={highestAnecdote()} />
     </div>
   );
 };
