@@ -3,13 +3,9 @@ const Header = ({ course }) => <h1>{course}</h1>;
 const Total = ({ parts }) => {
   let sum = 0;
 
-  let calculateSum = () => {
-    parts.map((part) => {
-      sum += part.exercises;
-    });
-  };
-
-  calculateSum();
+  parts.map((part) => {
+    sum += part.exercises;
+  });
 
   return (
     <p>
