@@ -15,8 +15,19 @@ const App = () => {
     setNewName("");
   };
 
+  const checkIfExists = (value) => {
+    if (persons.some((person) => person.name === value)) {
+      return true;
+    }
+  };
+
   const handleNameChange = (event) => {
-    setNewName(event.target.value);
+    if (checkIfExists(event.target.value)) {
+      alert(`${event.target.value} already exists in the phonebook.`);
+      setNewName("");
+    } else {
+      setNewName(event.target.value);
+    }
   };
 
   return (
