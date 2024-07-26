@@ -56,7 +56,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <div>
-        Filter shown with a <input value={newQuery} onChange={handleQuery} />
+        Filter shown with <input value={newQuery} onChange={handleQuery} />
       </div>
       <div>
         <h2>Add a new</h2>
