@@ -15,17 +15,21 @@ const App = () => {
     axios.get("http://localhost:3001/persons").then((response) => {
       setPersons(response.data);
     });
-  }, []);
+  });
 
   const addName = (event) => {
     event.preventDefault();
     const nameObject = {
       name: newName,
       number: newNumber,
-      // id: persons.length + 1,
+      id: (persons.length + 1).toString(),
     };
 
-    setPersons(persons.concat(nameObject));
+    axios.post("http://localhost:3001/persons", nameObject).then((response) => {
+      // update display
+      setPersons(persons.concat(nameObject));
+      console.log(response);
+    });
     setNewName("");
     setNewNumber("");
   };
@@ -40,6 +44,7 @@ const App = () => {
     if (checkIfExists(event.target.value)) {
       alert(`${event.target.value} already exists in the phonebook.`);
       setNewName("");
+      setNewNumber("");
     } else {
       setNewName(event.target.value);
     }
