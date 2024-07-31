@@ -69,7 +69,7 @@ const App = () => {
   const showPersons =
     newQuery !== ""
       ? persons.filter((person) =>
-          person.name.toLocaleLowerCase().includes(newQuery.toLowerCase())
+          person.name.toLowerCase().includes(newQuery.toLowerCase())
         )
       : persons;
 
