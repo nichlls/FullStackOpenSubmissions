@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import PersonService from "./services/Persons";
 
 import Filter from "./components/Filter";
 import AddPerson from "./components/AddPerson";
@@ -12,10 +12,10 @@ const App = () => {
   const [newQuery, setNewQuery] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
+    PersonService.get().then((response) => {
       setPersons(response.data);
     });
-  });
+  }, []);
 
   const addName = (event) => {
     event.preventDefault();
@@ -25,10 +25,9 @@ const App = () => {
       id: (persons.length + 1).toString(),
     };
 
-    axios.post("http://localhost:3001/persons", nameObject).then((response) => {
+    PersonService.post(nameObject).then(() => {
       // update display
       setPersons(persons.concat(nameObject));
-      console.log(response);
     });
     setNewName("");
     setNewNumber("");
