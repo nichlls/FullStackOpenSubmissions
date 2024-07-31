@@ -9,4 +9,8 @@ const post = (object) => {
   return axios.post(url, object);
 };
 
-export default { get, post };
+const deleteID = (id) => {
+  return axios.delete(`${url}/${id}`);
+};
+
+export default { get, post, deleteID };

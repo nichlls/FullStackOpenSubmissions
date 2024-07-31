@@ -19,15 +19,21 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault();
+
+    if (checkIfExists(newName)) {
+      alert(`${newName} is already added to phonebook`);
+      return;
+    }
+
     const nameObject = {
       name: newName,
       number: newNumber,
       id: (persons.length + 1).toString(),
     };
 
-    PersonService.post(nameObject).then(() => {
+    PersonService.post(nameObject).then((response) => {
       // update display
-      setPersons(persons.concat(nameObject));
+      setPersons(persons.concat(response.data));
     });
     setNewName("");
     setNewNumber("");
@@ -40,13 +46,7 @@ const App = () => {
   };
 
   const handleNameChange = (event) => {
-    if (checkIfExists(event.target.value)) {
-      alert(`${event.target.value} already exists in the phonebook.`);
-      setNewName("");
-      setNewNumber("");
-    } else {
-      setNewName(event.target.value);
-    }
+    setNewName(event.target.value);
   };
 
   const handleNumberChange = (event) => {
@@ -55,6 +55,15 @@ const App = () => {
 
   const handleQuery = (event) => {
     setNewQuery(event.target.value);
+  };
+
+  const deleteEntry = (name, id) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      PersonService.deleteID(id).then(() => {
+        // update display
+        setPersons(persons.filter((person) => person.id !== id));
+      });
+    }
   };
 
   const showPersons =
@@ -81,7 +90,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <ShowPersons persons={showPersons} />
+      <ShowPersons persons={showPersons} deleteEntry={deleteEntry} />
     </div>
   );
 };
