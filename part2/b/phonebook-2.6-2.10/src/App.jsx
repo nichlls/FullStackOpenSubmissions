@@ -21,22 +21,52 @@ const App = () => {
     event.preventDefault();
 
     if (checkIfExists(newName)) {
-      alert(`${newName} is already added to phonebook`);
-      return;
+      const existingNameObject = persons.find(
+        (person) => person.name === newName
+      );
+
+      // check if new number is the same
+      if (newNumber === existingNameObject.number) {
+        alert(`${newName} is already added to phonebook`);
+        setNewName("");
+        setNewNumber("");
+        return;
+      }
+
+      if (
+        window.confirm(
+          `${existingNameObject.name} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const updatedNameObject = { ...existingNameObject, number: newNumber };
+
+        PersonService.update(updatedNameObject.id, updatedNameObject).then(
+          (response) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== existingNameObject.id ? person : response.data
+              )
+            );
+          }
+        );
+        setNewName("");
+        setNewNumber("");
+        return;
+      }
+    } else {
+      const nameObject = {
+        name: newName,
+        number: newNumber,
+        id: (persons.length + 1).toString(),
+      };
+
+      PersonService.post(nameObject).then((response) => {
+        // update display
+        setPersons(persons.concat(response.data));
+      });
+      setNewName("");
+      setNewNumber("");
     }
-
-    const nameObject = {
-      name: newName,
-      number: newNumber,
-      id: (persons.length + 1).toString(),
-    };
-
-    PersonService.post(nameObject).then((response) => {
-      // update display
-      setPersons(persons.concat(response.data));
-    });
-    setNewName("");
-    setNewNumber("");
   };
 
   const checkIfExists = (value) => {
