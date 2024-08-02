@@ -4,12 +4,14 @@ import PersonService from "./services/Persons";
 import Filter from "./components/Filter";
 import AddPerson from "./components/AddPerson";
 import ShowPersons from "./components/ShowPersons";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newQuery, setNewQuery] = useState("");
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     PersonService.get().then((response) => {
@@ -47,6 +49,10 @@ const App = () => {
                 person.id !== existingNameObject.id ? person : response.data
               )
             );
+            setNotification(`Updated ${updatedNameObject.name}`);
+            setTimeout(() => {
+              setNotification(null);
+            }, 5000);
           }
         );
         setNewName("");
@@ -64,6 +70,10 @@ const App = () => {
         // update display
         setPersons(persons.concat(response.data));
       });
+      setNotification(`Added ${nameObject.name}`);
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
       setNewName("");
       setNewNumber("");
     }
@@ -106,6 +116,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <div>
         <Filter newQuery={newQuery} handleQuery={handleQuery} />
       </div>
