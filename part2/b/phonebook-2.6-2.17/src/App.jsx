@@ -12,6 +12,12 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newQuery, setNewQuery] = useState("");
   const [notification, setNotification] = useState(null);
+  const [notificationType, setNotificationType] = useState(null);
+
+  const errorTypes = {
+    0: "error",
+    1: "successful",
+  };
 
   useEffect(() => {
     PersonService.get().then((response) => {
@@ -42,19 +48,28 @@ const App = () => {
       ) {
         const updatedNameObject = { ...existingNameObject, number: newNumber };
 
-        PersonService.update(updatedNameObject.id, updatedNameObject).then(
-          (response) => {
+        PersonService.update(updatedNameObject.id, updatedNameObject)
+          .then((response) => {
             setPersons(
               persons.map((person) =>
                 person.id !== existingNameObject.id ? person : response.data
               )
             );
             setNotification(`Updated ${updatedNameObject.name}`);
+            setNotificationType(errorTypes[1]);
             setTimeout(() => {
               setNotification(null);
+              setNotificationType(null);
             }, 5000);
-          }
-        );
+          })
+          .catch(() => {
+            setNotification(`Failed to update ${updatedNameObject.name}`);
+            setNotificationType(errorTypes[0]);
+            setTimeout(() => {
+              setNotification(null);
+              setNotificationType(null);
+            }, 5000);
+          });
         setNewName("");
         setNewNumber("");
         return;
@@ -66,16 +81,29 @@ const App = () => {
         id: (persons.length + 1).toString(),
       };
 
-      PersonService.post(nameObject).then((response) => {
-        // update display
-        setPersons(persons.concat(response.data));
-      });
-      setNotification(`Added ${nameObject.name}`);
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
-      setNewName("");
-      setNewNumber("");
+      PersonService.post(nameObject)
+        .then((response) => {
+          // update display
+          setPersons(persons.concat(response.data));
+          setNotification(`Added ${nameObject.name}`);
+          setNotificationType(errorTypes[1]);
+          setTimeout(() => {
+            setNotification(null);
+            setNotificationType(null);
+          }, 5000);
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch(() => {
+          setNotification(`Failed to add ${nameObject.name}`);
+          setNotificationType(errorTypes[0]);
+          setTimeout(() => {
+            setNotification(null);
+            setNotificationType(null);
+          }, 5000);
+          setNewName("");
+          setNewNumber("");
+        });
     }
   };
 
@@ -99,10 +127,14 @@ const App = () => {
 
   const deleteEntry = (name, id) => {
     if (window.confirm(`Delete ${name}?`)) {
-      PersonService.deleteID(id).then(() => {
-        // update display
-        setPersons(persons.filter((person) => person.id !== id));
-      });
+      PersonService.deleteID(id)
+        .then(() => {
+          // update display
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => {
+          alert("Error sir: ", error);
+        });
     }
   };
 
@@ -116,7 +148,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification type={notificationType} message={notification} />
       <div>
         <Filter newQuery={newQuery} handleQuery={handleQuery} />
       </div>
