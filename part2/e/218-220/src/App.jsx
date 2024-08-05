@@ -37,7 +37,7 @@ const ShowCountry = ({ country }) => {
   );
 };
 
-const ShowCountries = ({ countries }) => {
+const ShowCountries = ({ countries, handleShowCountry }) => {
   try {
     if (countries.length >= 10) {
       return <p>Too many matches, include more characters</p>;
@@ -48,7 +48,10 @@ const ShowCountries = ({ countries }) => {
         <div>
           {countries.map((country) => (
             <div key={country.name.common}>
-              <p>{country.name.common}</p>
+              <p>
+                {country.name.common}{" "}
+                <button onClick={() => handleShowCountry(country)}>Show</button>
+              </p>
             </div>
           ))}
         </div>
@@ -62,6 +65,7 @@ const ShowCountries = ({ countries }) => {
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [search, setSearch] = useState("");
+  const [showCountry, setShowCountry] = useState(false);
 
   useEffect(() => {
     axios
@@ -76,6 +80,7 @@ const App = () => {
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
+    setShowCountry(false);
   };
 
   const showCountries =
@@ -85,13 +90,24 @@ const App = () => {
         )
       : countries;
 
+  const handleShowCountry = (country) => {
+    setShowCountry(country);
+  };
+
   return (
     <>
       <div>
         <Search search={search} handleSearch={handleSearch} />
       </div>
       <div>
-        <ShowCountries countries={showCountries} />
+        {showCountry ? (
+          <ShowCountry country={showCountry} />
+        ) : (
+          <ShowCountries
+            countries={showCountries}
+            handleShowCountry={handleShowCountry}
+          />
+        )}
       </div>
     </>
   );
