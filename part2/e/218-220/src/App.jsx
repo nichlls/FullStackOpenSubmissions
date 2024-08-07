@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import axios from "axios";
 
-// TODO: APIKEY
 const APIKEY = import.meta.env.VITE_WEATHER_APIKEY;
 
 const Search = ({ search, handleSearch }) => {
