@@ -6,11 +6,9 @@ const APIKEY = import.meta.env.VITE_WEATHER_APIKEY;
 
 const Search = ({ search, handleSearch }) => {
   return (
-    <div>
-      <p>
-        Find countries <input value={search} onChange={handleSearch}></input>
-      </p>
-    </div>
+    <p>
+      Find countries <input value={search} onChange={handleSearch}></input>
+    </p>
   );
 };
 
