@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 
 import axios from "axios";
 
+// TODO: APIKEY
+const APIKEY = import.meta.env.VITE_WEATHER_APIKEY;
+
 const Search = ({ search, handleSearch }) => {
   return (
     <div>
@@ -33,6 +36,14 @@ const ShowCountry = ({ country }) => {
       <div>
         <img src={country.flags.png} />
       </div>
+      <div>
+        <ShowWeather
+          apikey={APIKEY}
+          city={country.capital[0]}
+          latitude={country.latlng[0]}
+          longitude={country.latlng[1]}
+        />
+      </div>
     </div>
   );
 };
@@ -43,6 +54,8 @@ const ShowCountries = ({ countries, handleShowCountry }) => {
       return <p>Too many matches, include more characters</p>;
     } else if (countries.length === 1) {
       return <ShowCountry country={countries[0]} />;
+    } else if (countries.length === 0) {
+      return <p>No matches</p>;
     } else {
       return (
         <div>
@@ -62,6 +75,36 @@ const ShowCountries = ({ countries, handleShowCountry }) => {
   }
 };
 
+const ShowWeather = ({ apikey, city, latitude, longitude }) => {
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    const url = `https://api.pirateweather.net/forecast/${apikey}/${latitude},${longitude}`;
+
+    axios
+      .get(url)
+      .then((response) => {
+        setWeather(response.data);
+      })
+      .catch((error) => {
+        console.log("Error getting weather data: ", error);
+      });
+  }, []);
+
+  if (!weather) {
+    return <p>No weather data available.</p>;
+  }
+
+  return (
+    <div>
+      <h2>Weather in {city}</h2>
+      <p>Currently: {weather.currently.summary}</p>
+      <p>Temperature: {weather.currently.temperature}°F</p>
+      <p>Wind: {weather.currently.windSpeed} m/s</p>
+    </div>
+  );
+};
+
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [search, setSearch] = useState("");
@@ -74,7 +117,7 @@ const App = () => {
         setCountries(response.data);
       })
       .catch((error) => {
-        console.log("erorr when fetching: ", error);
+        console.log("Error when fetching: ", error);
       });
   }, []);
 
@@ -101,7 +144,9 @@ const App = () => {
       </div>
       <div>
         {showCountry ? (
-          <ShowCountry country={showCountry} />
+          <>
+            <ShowCountry country={showCountry} />
+          </>
         ) : (
           <ShowCountries
             countries={showCountries}
