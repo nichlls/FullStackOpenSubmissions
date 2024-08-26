@@ -1,0 +1,20 @@
+PUT http://localhost:3001/api/persons/66c1291ec7d8570c7fd110b9
+Content-Type: application/json
+
+{
+    "name": "A",
+    "number": "321-354-987"
+}
+
+###
+
+GET http://localhost:3001/api/persons/66c1291ec7d8570c7fd110b2
+
+###
+
+GET http://localhost:3001/api/persons/
+
+
+###
+
+DELETE http://localhost:3001/api/persons/1
